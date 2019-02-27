@@ -13,7 +13,11 @@ def input_students
     end
     #add the student hash to the array
     students << {name: name, cohort: month}
-    puts "Now we have #{students.count} students"
+    if students.count == 1
+      puts "Now we have #{students.count} student"
+    else
+      puts "Now we have #{students.count} students"
+    end
     #get another name from the user
     puts "Enter the name of the student"
     name = gets.chomp.capitalize
