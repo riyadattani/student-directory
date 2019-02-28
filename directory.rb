@@ -3,11 +3,11 @@
 def input_students
   puts "Please enter the name of the student"
   puts "To finish, just hit return twice"
-  name = gets.chomp.capitalize
+  name = STDIN.gets.chomp.capitalize
   #while the name is not empty, repeat this code:
   while !name.empty? do
     puts "Which cohort are they in?"
-    month = gets.chomp.capitalize.to_sym
+    month = STDIN.gets.chomp.capitalize.to_sym
     if month.empty?
       month = "TBC".to_sym
     end
@@ -20,25 +20,24 @@ def input_students
     end
     #get another name from the user
     puts "Enter the name of the student"
-    name = gets.chomp.capitalize
+    name = STDIN.gets.chomp.capitalize
   end
 end
 
 #----------Interactive Menu----------
-
-def interactive_menu
-  loop do
-    print_menu
-    process(gets.chomp)
-  end
-end
-
 def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
   puts "3. Save the list to students.cvs"
   puts "4. Load the list from students.cvs"
   puts "9. Exit"
+end
+
+def interactive_menu
+  loop do
+    print_menu
+    process(STDIN.gets.chomp)
+  end
 end
 
 def show_students
@@ -86,9 +85,7 @@ end
 #----------Saving and loading the file ---------
 
 def save_students
-  #open the file for writing
   file = File.open("students.cvs", "w")
-  # iterate over the array of students
   @students. each do |student|
     student_data = [student[:name], student[:cohort]]
     cvs_line = student_data.join(", ")
@@ -97,8 +94,8 @@ def save_students
   file.close
 end
 
-def load_students
-  file = File.open("students.cvs", "r")
+def load_students(filename = "students.cvs") # will load from students.csv by default
+  file = File.open(filename, "r")
   file.readlines.each do |line|
   name, month = line.chomp.split(", ")
     @students << {name: name, cohort: month}
@@ -106,4 +103,17 @@ def load_students
   file.close
 end
 
+def try_load_students
+  filename = ARGV.first # first argument from the command line
+  return if filename.nil?
+  if File.exists?(filename)
+    load_students(filename)
+     puts "Loaded #{@students.count} from #{filename}"
+  else
+    puts "Sorry, #{filename} doesn't exist."
+    exit
+  end
+end
+
+try_load_students
 interactive_menu
