@@ -36,6 +36,7 @@ end
 def print_menu
   puts "1. Input the students"
   puts "2. Show the students"
+  puts "3. Save the list to students.cvs"
   puts "9. Exit"
 end
 
@@ -51,6 +52,8 @@ def process(selection)
     input_students
   when "2"
     show_students
+  when "3"
+    save_students
   when "9"
     exit
   else
@@ -75,6 +78,20 @@ end
 
 def print_footer
   puts "Overall, we have #{@students.count} great students".center(30)
+end
+
+#----------Saving the file ---------
+
+def save_students
+  #open the file for writing
+  flie = File.open("students.cvs", "w")
+  # iterate over the array of students
+  @students. each do |student|
+    student_data = [student[:name], student[:cohort.capitalize]]
+    cvs_line = student_data.join(", ")
+    file.puts cvs_line
+  end
+  flie.close
 end
 
 interactive_menu
